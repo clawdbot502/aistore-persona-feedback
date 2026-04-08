@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TestersAI Copywriting & SEO Report - AI STORE</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0d1117; color: #e6edf3; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; line-height: 1.6; }
+  .container { max-width: 1040px; margin: 0 auto; padding: 40px 24px; }
+  .header { text-align: center; padding: 40px 0 30px; border-bottom: 1px solid #30363d; }
+  .header .brand { font-size: 14px; color: #8b949e; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .header h1 { font-size: 28px; color: #f0f6fc; margin-bottom: 4px; }
+  .header h2 { font-size: 16px; color: #8b949e; font-weight: 400; margin-bottom: 16px; }
+  .header .meta { display: flex; justify-content: center; gap: 32px; font-size: 13px; color: #8b949e; flex-wrap: wrap; }
+  .nav-links { display: flex; justify-content: center; gap: 16px; margin-top: 16px; }
+  .nav-links a { color: #58a6ff; text-decoration: none; font-size: 13px; padding: 6px 14px; border: 1px solid #30363d; border-radius: 6px; transition: all 0.2s; }
+  .nav-links a:hover { background: #161b22; border-color: #58a6ff; }
+
+  /* Stats */
+  .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 16px; margin: 32px 0; }
+  .stat-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px; text-align: center; }
+  .stat-card .stat-label { font-size: 12px; color: #8b949e; margin-bottom: 6px; }
+  .stat-card .stat-value { font-size: 32px; font-weight: 700; }
+  .stat-total .stat-value { color: #f0f6fc; }
+  .stat-copy .stat-value { color: #f778ba; }
+  .stat-seo .stat-value { color: #3fb950; }
+  .stat-critical .stat-value { color: #f85149; }
+  .stat-major .stat-value { color: #d29922; }
+  .stat-minor .stat-value { color: #58a6ff; }
+
+  /* Severity bar */
+  .severity-bar { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px 24px; margin: 24px 0; }
+  .severity-bar h3 { font-size: 15px; color: #f0f6fc; margin-bottom: 12px; }
+  .bar-track { height: 10px; background: #21262d; border-radius: 5px; overflow: hidden; display: flex; }
+  .bar-critical { background: #f85149; }
+  .bar-major { background: #d29922; }
+  .bar-minor { background: #58a6ff; }
+  .bar-good { background: #3fb950; }
+  .bar-legend { display: flex; gap: 20px; margin-top: 10px; font-size: 12px; color: #8b949e; flex-wrap: wrap; }
+  .bar-legend span::before { content: ''; display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  .bar-legend .leg-critical::before { background: #f85149; }
+  .bar-legend .leg-major::before { background: #d29922; }
+  .bar-legend .leg-minor::before { background: #58a6ff; }
+  .bar-legend .leg-good::before { background: #3fb950; }
+
+  /* Section */
+  .page-section { margin: 32px 0; }
+  .page-section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #21262d; }
+  .page-section-header .page-icon { width: 36px; height: 36px; border-radius: 8px; background: #1f6feb; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0; }
+  .page-section-header h3 { font-size: 18px; color: #f0f6fc; }
+  .page-section-header .page-url { font-size: 13px; color: #8b949e; font-weight: 400; }
+
+  /* Issue card */
+  .issue-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px 24px; margin-bottom: 12px; transition: border-color 0.2s; }
+  .issue-card:hover { border-color: #484f58; }
+  .issue-card.good { border-left: 3px solid #3fb950; }
+  .issue-card-header { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px; }
+  .issue-id { font-size: 13px; color: #8b949e; font-weight: 600; min-width: 60px; padding-top: 2px; }
+  .issue-title { font-size: 15px; font-weight: 600; color: #f0f6fc; flex: 1; }
+  .severity-badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap; }
+  .sev-critical { background: #3d1214; color: #f85149; }
+  .sev-major { background: #332d00; color: #d29922; }
+  .sev-minor { background: #0c2d6b; color: #58a6ff; }
+  .sev-good { background: #0d3320; color: #3fb950; }
+  .issue-meta { display: flex; gap: 16px; font-size: 12px; color: #8b949e; margin-bottom: 12px; flex-wrap: wrap; }
+  .issue-meta .tester { color: #bc8cff; }
+  .issue-detail { margin-bottom: 10px; }
+  .issue-detail h4 { font-size: 12px; color: #8b949e; margin-bottom: 4px; font-weight: 600; }
+  .issue-detail p { font-size: 13px; color: #c9d1d9; }
+  .issue-detail .code-inline { background: #0d1117; border: 1px solid #30363d; padding: 2px 6px; border-radius: 4px; font-family: 'SF Mono', Monaco, 'Cascadia Mono', monospace; font-size: 12px; color: #f0f6fc; }
+
+  /* Tags */
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+  .tag { background: #1f2937; border: 1px solid #30363d; border-radius: 12px; padding: 2px 10px; font-size: 11px; color: #8b949e; }
+  .tag.copy { border-color: #f778ba; color: #f778ba; }
+  .tag.seo { border-color: #3fb950; color: #3fb950; }
+  .tag.cta { border-color: #d29922; color: #e3b341; }
+  .tag.tone { border-color: #58a6ff; color: #58a6ff; }
+  .tag.i18n { border-color: #bc8cff; color: #d2a8ff; }
+  .tag.trust { border-color: #f85149; color: #f85149; }
+  .tag.meta { border-color: #3fb950; color: #56d364; }
+  .tag.structure { border-color: #58a6ff; color: #79c0ff; }
+
+  /* SEO checklist */
+  .seo-checklist { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 24px; margin: 24px 0; }
+  .seo-checklist h3 { font-size: 16px; color: #f0f6fc; margin-bottom: 16px; }
+  .check-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 10px; font-size: 13px; color: #c9d1d9; }
+  .check-icon { flex-shrink: 0; width: 18px; height: 18px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; margin-top: 2px; }
+  .check-pass { background: #0d3320; color: #3fb950; }
+  .check-fail { background: #3d1214; color: #f85149; }
+  .check-warn { background: #332d00; color: #d29922; }
+
+  /* Recommendations */
+  .recommendations { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 28px; margin: 32px 0; }
+  .recommendations h3 { font-size: 18px; margin-bottom: 16px; color: #f0f6fc; }
+  .rec-item { display: flex; gap: 12px; margin-bottom: 14px; }
+  .rec-num { width: 28px; height: 28px; background: #1f6feb; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; flex-shrink: 0; }
+  .rec-text { font-size: 14px; color: #c9d1d9; }
+  .rec-text strong { color: #f0f6fc; }
+
+  .footer { text-align: center; padding: 40px 0; border-top: 1px solid #30363d; margin-top: 40px; }
+  .footer p { font-size: 12px; color: #8b949e; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="brand">TestersAI</div>
+    <h1>Copywriting & SEO Detection Report</h1>
+    <h2>aistore.club/zh — AI 时代的 App Store</h2>
+    <div class="meta">
+      <span>URL: aistore.club/zh</span>
+      <span>日期: 2026-04-08</span>
+      <span>4 位专项测试 AI</span>
+      <span>文案 + SEO 双维度分析</span>
+    </div>
+    <div class="nav-links">
+      <a href="index.html">Persona Feedback 报告</a>
+      <a href="bug-report.html">Bug Detection 报告</a>
+      <a href="copywriting-seo-report.html">文案 & SEO 报告</a>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card stat-total">
+      <div class="stat-label">总检测项</div>
+      <div class="stat-value">20</div>
+    </div>
+    <div class="stat-card stat-copy">
+      <div class="stat-label">文案问题</div>
+      <div class="stat-value">10</div>
+    </div>
+    <div class="stat-card stat-seo">
+      <div class="stat-label">SEO 问题</div>
+      <div class="stat-value">5</div>
+    </div>
+    <div class="stat-card stat-critical">
+      <div class="stat-label">Critical</div>
+      <div class="stat-value">3</div>
+    </div>
+    <div class="stat-card stat-major">
+      <div class="stat-label">Major</div>
+      <div class="stat-value">8</div>
+    </div>
+    <div class="stat-card stat-minor">
+      <div class="stat-label">Minor</div>
+      <div class="stat-value">4</div>
+    </div>
+  </div>
+
+  <!-- Severity bar -->
+  <div class="severity-bar">
+    <h3>问题严重度分布</h3>
+    <div class="bar-track">
+      <div class="bar-critical" style="width:15%"></div>
+      <div class="bar-major" style="width:40%"></div>
+      <div class="bar-minor" style="width:20%"></div>
+      <div class="bar-good" style="width:25%"></div>
+    </div>
+    <div class="bar-legend">
+      <span class="leg-critical">Critical (3) — 品牌信任风险</span>
+      <span class="leg-major">Major (8) — 转化率影响</span>
+      <span class="leg-minor">Minor (4) — 优化建议</span>
+      <span class="leg-good">Pass (5) — 已达标项</span>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SEO 基础检查清单 -->
+  <!-- ============================================================ -->
+  <div class="seo-checklist">
+    <h3>SEO 基础检查清单（基于 HTML 源码验证）</h3>
+    <div class="check-item"><div class="check-icon check-pass">&#10003;</div><span><strong>title 标签</strong> — "AI STORE - AI 时代的 App Store"，长度适中，包含核心关键词</span></div>
+    <div class="check-item"><div class="check-icon check-pass">&#10003;</div><span><strong>meta description</strong> — 完整描述，约 80 字，涵盖核心业务定位</span></div>
+    <div class="check-item"><div class="check-icon check-pass">&#10003;</div><span><strong>meta keywords</strong> — 包含 9 个关键词：AI Store, AI 工具, AI 应用商店, 大模型聚合, Skills, MCP, AI Agent 等</span></div>
+    <div class="check-item"><div class="check-icon check-pass">&#10003;</div><span><strong>canonical URL</strong> — <code>https://aistore.club/zh</code> 正确设置</span></div>
+    <div class="check-item"><div class="check-icon check-pass">&#10003;</div><span><strong>hreflang</strong> — zh / en / x-default 三组正确配置</span></div>
+    <div class="check-item"><div class="check-icon check-pass">&#10003;</div><span><strong>OG 标签</strong> — og:title, og:description, og:image (1200x630), og:type, og:locale 齐全</span></div>
+    <div class="check-item"><div class="check-icon check-pass">&#10003;</div><span><strong>Twitter Card</strong> — summary_large_image 类型，标题/描述/图片完整</span></div>
+    <div class="check-item"><div class="check-icon check-pass">&#10003;</div><span><strong>JSON-LD 结构化数据</strong> — WebSite + Organization 双 Schema，含 SearchAction</span></div>
+    <div class="check-item"><div class="check-icon check-pass">&#10003;</div><span><strong>lang 属性</strong> — <code>&lt;html lang="zh"&gt;</code> 正确</span></div>
+    <div class="check-item"><div class="check-icon check-warn">!</div><span><strong>OG 图片实际可访问性</strong> — <code>og-image-zh.png</code> 路径存在但未验证实际文件是否可访问</span></div>
+    <div class="check-item"><div class="check-icon check-fail">&#10007;</div><span><strong>robots.txt</strong> — 未验证是否存在且允许搜索引擎爬取（Next.js 默认不生成）</span></div>
+    <div class="check-item"><div class="check-icon check-fail">&#10007;</div><span><strong>sitemap.xml</strong> — 未验证是否存在（对 1200+ 资源站点至关重要）</span></div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 文案检测 -->
+  <!-- ============================================================ -->
+  <div class="page-section">
+    <div class="page-section-header">
+      <div class="page-icon">CP</div>
+      <div>
+        <h3>文案检测 <span class="page-url">基于 Leila (Content) + Sundar (Homepage) + Zachary (Landing) 视角</span></h3>
+      </div>
+    </div>
+
+    <!-- COPY-001 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">COPY-001</div>
+        <div class="issue-title">主标题"AI 时代的 App Store"承诺与实际体验严重脱节</div>
+        <span class="severity-badge sev-critical">Critical</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 首页 Hero 区</span>
+        <span>测试者: <span class="tester">Sundar (Homepage)</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>"AI 时代的 App Store"这个类比暗示了一个面向所有用户、直观易用的平台。然而网站实际内容完全围绕开发者术语构建（Skills、MCP、Agent、部署、配置文件），非技术用户完全无法使用。App Store 的核心隐喻是"任何人都能找到想要的 App"，而 aistore 的实际体验更接近 GitHub Marketplace。</p>
+      </div>
+      <div class="issue-detail">
+        <h4>影响</h4>
+        <p>品牌承诺与实际体验的落差会导致用户信任崩塌。用户在首屏被吸引进来，但继续浏览后会发现"被骗了"，跳出率会极高。这是文案中最严重的问题——不是文案写得不好，而是文案写的不是真实的产品。</p>
+      </div>
+      <div class="issue-detail">
+        <h4>建议</h4>
+        <p>二选一：(A) 调整文案定位，明确面向开发者，如"AI 开发者的工具商店"；(B) 保持现有文案但大幅改造产品体验，增加场景化入口、中文化内容、新手引导，真正兑现"App Store"承诺。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag copy">文案定位</span>
+        <span class="tag trust">品牌信任</span>
+        <span class="tag tone">语气不一致</span>
+      </div>
+    </div>
+
+    <!-- COPY-002 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">COPY-002</div>
+        <div class="issue-title">副标题"消除技术壁垒，让 AI 开箱即用"过度承诺</div>
+        <span class="severity-badge sev-critical">Critical</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 首页第二屏</span>
+        <span>测试者: <span class="tester">Leila (Content)</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>副标题"消除技术壁垒"配合下方的功能列表（场景化精选、零门槛上手、安全审计、实测对比、选型指南、体系化教程），构建了一个"任何人都能用"的叙事。但实际点击进入 Skills 页面后，用户面对的是英文描述、技术标签、安装命令——"技术壁垒"不但没有被消除，反而被加强了。</p>
+      </div>
+      <div class="issue-detail">
+        <h4>关键矛盾</h4>
+        <p>功能列表中"零门槛上手，一键直接启用"这一条描述："忘记那些复杂的参数调优与底层设置。我们将复杂的技术标准化封装，让你无需任何技术背景，点击即可开始使用。"——但实际产品完全需要技术背景。这构成了虚假宣传的风险。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag copy">过度承诺</span>
+        <span class="tag trust">信任风险</span>
+        <span class="tag cta">CTA 不实</span>
+      </div>
+    </div>
+
+    <!-- COPY-003 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">COPY-003</div>
+        <div class="issue-title">5 步流程文案开发者视角，普通用户无法共鸣</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 首页第三屏</span>
+        <span>测试者: <span class="tester">Zachary (Landing)</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>5 步流程标题：了解→发现→对比→部署→学习。其中"部署"和"选对配置"是开发者用语。普通用户不会"部署"任何东西——他们只想"使用"。另外"对比 10+ 云厂商"、"RTX 4060 / 16GB / ¥3.2/hr"这类文案明确指向有技术背景的用户。</p>
+      </div>
+      <div class="issue-detail">
+        <h4>建议</h4>
+        <p>如果坚持"App Store"定位，流程应改为：发现→了解→试用→比较→掌握。用"试用"替代"部署"，用"找到最适合你的"替代"选对大模型"。如果面向开发者，则当前流程可以保留，但需要在首屏明确告知目标用户是开发者。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag copy">用户视角</span>
+        <span class="tag tone">技术语调</span>
+      </div>
+    </div>
+
+    <!-- COPY-004 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">COPY-004</div>
+        <div class="issue-title">"开始使用"按钮缺乏明确目标指向</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 首页导航栏</span>
+        <span>测试者: <span class="tester">Zachary (Landing)</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>导航栏右侧有一个醒目的"开始使用"按钮（<code>btn-primary</code>），这是全站唯一的主要 CTA。但作为新用户，我不清楚"开始使用"会带我到哪里——是注册页面？Skills 浏览？还是某个引导流程？CTA 文案应该告诉用户点击后会发生什么。</p>
+      </div>
+      <div class="issue-detail">
+        <h4>建议</h4>
+        <p>改为更具体的 CTA，如"浏览 Skills"、"发现 AI 工具"或"免费开始探索"。同时，首屏搜索框下方的区域缺少辅助 CTA——搜索框是被动交互，应增加一个主动引导的按钮。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag cta">CTA 模糊</span>
+        <span class="tag copy">转化路径</span>
+      </div>
+    </div>
+
+    <!-- COPY-005 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">COPY-005</div>
+        <div class="issue-title">中英混搭严重，文案语言不一致</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 全站（首页 + Skills + Wiki）</span>
+        <span>测试者: <span class="tester">Leila (Content)</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>首页文案全部为中文，导航栏也中文化了，但进入 Skills 页面后，Skill 描述全部为英文（如"Record learning processes, errors, and corrections..."）。5 步流程中的模拟数据也是英文（"GPT-4o vs Claude 3.5 vs DeepSeek"、"Search: 'PostgreSQL Agent' → 98% Match"）。这种中英割裂感严重影响阅读连贯性。</p>
+      </div>
+      <div class="issue-detail">
+        <h4>具体表现</h4>
+        <p>首页搜索框 placeholder 是中文（"搜索 Skill、MCP、大模型、教程..."），但"System Interface Preview"区域的文字全部是英文。安全审计雷达图的标签是中文（"代码审计"、"权限滥用审查"），但分值旁边没有解释性文案。整体给人"做了一半的本地化"的感觉。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag i18n">语言不一致</span>
+        <span class="tag copy">文案割裂</span>
+      </div>
+    </div>
+
+    <!-- COPY-006 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">COPY-006</div>
+        <div class="issue-title">统计数字缺乏可信度背书</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 首页 Hero 区 + 第三屏</span>
+        <span>测试者: <span class="tester">Leila (Content)</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>首屏展示了"1200+ 资源收录"、"50+ 场景覆盖"、"100+ 教程指南"、"20+ 客户端支持"，第三屏还有"覆盖 20+ 主流模型"、"1,200+ 资源"、"50+ 组横向对比"、"对比 10+ 云厂商"、"100+ 篇教程"。这些数字出现在首屏，承担着建立信任的重任，但没有任何数据来源或佐证。另外"50+ 场景覆盖"和"50+ 组横向对比"中的数字是否有实际数据支撑？如果部分页面还是 404 或空数据，这些数字反而会损害可信度。</p>
+      </div>
+      <div class="issue-detail">
+        <h4>建议</h4>
+        <p>增加数据来源说明，如"实时统计"或链接到具体列表页。如果数字是静态的，建议标注更新日期，如"截至 2026.03"。最重要的是——确保这些数字与实际可访问的内容匹配。如果教程入口（基础指南）还是 404，就不要在首屏宣传"100+ 教程指南"。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag trust">可信度</span>
+        <span class="tag copy">数据佐证</span>
+      </div>
+    </div>
+
+    <!-- COPY-007 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">COPY-007</div>
+        <div class="issue-title">安全审计文案专业但缺乏具体细节</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 首页安全审计区域</span>
+        <span>测试者: <span class="tester">Leila (Content)</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>安全区域的文案写得很好——"严苛审计，宁缺毋滥。为你守住 AI 安全底线"、"深度防护，层层把关，终结 AI 隐形风险"。雷达图展示了 6 个维度（代码审计 9.8、真实环境实测 9.9、权限滥用审查 9.5、隐私合规验证 9.4、数据安全 9.6、底层依赖检测 9.2）。但问题是：(1) 这些分数是谁评的？(2) 评分标准是什么？(3) "静态深度扫描"、"隔离沙箱模拟"、"专家合规复核"这三个功能描述虽然生动，但没有实际案例佐证。</p>
+      </div>
+      <div class="issue-detail">
+        <h4>建议</h4>
+        <p>增加一个"查看审计标准"链接，展示具体的检测流程和标准。或者增加一个真实案例："某 Skill 因检测到 XX 风险被下架"——具体的故事比抽象的分数更有说服力。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag trust">信任背书</span>
+        <span class="tag copy">细节不足</span>
+      </div>
+    </div>
+
+    <!-- COPY-008 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">COPY-008</div>
+        <div class="issue-title">"了解更多"按钮指向不明，缺乏差异化描述</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 首页 5 步流程区域</span>
+        <span>测试者: <span class="tester">Zachary (Landing)</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>5 个步骤每步都有相同的"了解更多 →"按钮，文案完全相同。作为着陆页优化，每个 CTA 应该有独特的文案来暗示下一步内容，如"查看模型对比"、"探索 Skill 库"、"阅读部署指南"等。统一的"了解更多"降低了点击欲望。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag cta">CTA 同质化</span>
+        <span class="tag copy">差异化</span>
+      </div>
+    </div>
+
+    <!-- COPY-009 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">COPY-009</div>
+        <div class="issue-title">Footer 链接文案为空锚点，浪费 SEO 权重</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 全站 Footer</span>
+        <span>测试者: <span class="tester">Leila (Content) + SEO 视角</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>Footer 中的"模型库"、"MCP 资源"、"Skill 插件"、"安全标准"、"关于我们"、"加入我们"、"隐私政策"、"联系支持"共 8 个链接，全部指向 <code>&lt;a href="#"&gt;</code>。这些链接既无法引导用户，也浪费了 Footer 的内部链接 SEO 权重。尤其是"隐私政策"——这不仅影响 SEO，还可能涉及法律合规问题。</p>
+      </div>
+      <div class="issue-detail">
+        <h4>建议</h4>
+        <p>优先实现"隐私政策"和"联系支持"页面（法律必要），然后补充"关于我们"和"安全标准"。未上线的页面不要显示链接，或改为纯文本而非锚点。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag seo">SEO 权重浪费</span>
+        <span class="tag copy">空链接</span>
+        <span class="tag trust">合规风险</span>
+      </div>
+    </div>
+
+    <!-- COPY-010 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">COPY-010</div>
+        <div class="issue-title">首屏搜索框存在但价值主张缺乏情感连接</div>
+        <span class="severity-badge sev-minor">Minor</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 首页 Hero 区</span>
+        <span>测试者: <span class="tester">Kwame (Search)</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>首屏有搜索框（placeholder: "搜索 Skill、MCP、大模型、教程..."），但搜索框上方的文案是纯功能描述，缺乏情感钩子。"一站式聚合全网优质大模型与 AI 智能工具"读起来像产品说明书，不像一个能让人产生共鸣的品牌主张。</p>
+      </div>
+      <div class="issue-detail">
+        <h4>建议</h4>
+        <p>在搜索框上方增加一个情感化的副标题，如"还在为找不到合适的 AI 工具发愁？"或"1,200+ 精选 AI 工具，搜一下就知道哪个适合你"。将搜索从"功能"升级为"解决方案"。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag copy">情感连接</span>
+        <span class="tag tone">品牌语调</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- SEO 深度检测 -->
+  <!-- ============================================================ -->
+  <div class="page-section">
+    <div class="page-section-header">
+      <div class="page-icon">SE</div>
+      <div>
+        <h3>SEO 深度检测 <span class="page-url">基于 HTML 源码 + 内容分析</span></h3>
+      </div>
+    </div>
+
+    <!-- SEO-001 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">SEO-001</div>
+        <div class="issue-title">标题层级不规范，存在 h2 跳级问题</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 首页</span>
+        <span>测试者: <span class="tester">SEO Structure Analysis</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>首页标题层级为：h1（"AI 时代的 App Store"）→ h2（"消除技术壁垒，让 AI 开箱即用"）→ h2（"一个平台，覆盖 AI 使用的每一步"）→ h3（5 个步骤标题）→ h2（安全区域）→ h4（安全子项）。5 步流程区域的 h3 标题内容过于相似（"了解 — ..."、"发现 — ..."等），不利于搜索引擎理解页面内容的层次结构。</p>
+      </div>
+      <div class="issue-detail">
+        <h4>建议</h4>
+        <p>每个 h3 应包含更具体的关键词，如"选择大模型 — 20+ 模型对比评测"而非仅"了解 — 选对大模型"。这样既优化了 SEO，也帮助用户快速扫描理解。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag structure">标题层级</span>
+        <span class="tag seo">关键词布局</span>
+      </div>
+    </div>
+
+    <!-- SEO-002 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">SEO-002</div>
+        <div class="issue-title">大量内容为模拟数据，搜索引擎无法索引实质内容</div>
+        <span class="severity-badge sev-critical">Critical</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 首页 5 步流程区域</span>
+        <span>测试者: <span class="tester">SEO Content Analysis</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>5 步流程的"System Interface Preview"区域内容为占位符文本："GPT-4o vs Claude 3.5 vs DeepSeek"、"Search: 'PostgreSQL Agent' → 98% Match"、"Table: PG Agent 9.4 | DB MCP 7.8"、"RTX 4060 / 16GB / ¥3.2/hr"、"Path: Intro → Config → Deploy"。这些不是真实内容，搜索引擎抓取后无法为这些查询建立有效的索引。对于"模型对比"、"AI 工具搜索"等高价值关键词，这些区域本应成为重要的 SEO 内容区域。</p>
+      </div>
+      <div class="issue-detail">
+        <h4>影响</h4>
+        <p>搜索引擎（尤其是 Google）越来越重视页面的"有用性"。一个充满占位符的页面会被判定为低质量内容，影响整站排名。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag seo">内容质量</span>
+        <span class="tag copy">占位符</span>
+      </div>
+    </div>
+
+    <!-- SEO-003 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">SEO-003</div>
+        <div class="issue-title">多个核心页面 404，严重影响站内链接权重传递</div>
+        <span class="severity-badge sev-major">Major</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 全站导航</span>
+        <span>测试者: <span class="tester">SEO Link Analysis</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>导航栏"基础指南"链接到 <code>/zh/guide/basic</code>（实际返回 404）。"MCP 资源"在 Footer 中链接到 <code>#</code>。Skills 页面"热门搜索"为空。这些断链和空内容意味着：(1) 搜索引擎爬虫遇到 404 会停止爬取该路径；(2) 首页的权重无法通过内部链接传递到这些本应是核心的页面；(3) 对于"MCP 教程"、"AI 入门指南"等长尾关键词，网站完全错失了 SEO 机会。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag seo">内部链接</span>
+        <span class="tag structure">404 断链</span>
+      </div>
+    </div>
+
+    <!-- SEO-004 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">SEO-004</div>
+        <div class="issue-title">图片 alt 属性不完整，影响图片搜索排名</div>
+        <span class="severity-badge sev-minor">Minor</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 全站</span>
+        <span>测试者: <span class="tester">SEO Image Analysis</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>Logo 图片有 alt="AISTORE"（正确），但 Footer 社交媒体按钮使用通用 alt="Social link"，无法被搜索引擎识别。安全审计区域的 SVG 雷达图是内联 SVG，没有 alt 属性或 aria-label，虽然对 SEO 影响不大（SVG 不被当作图片索引），但影响无障碍访问。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag seo">图片 SEO</span>
+        <span class="tag structure">alt 属性</span>
+      </div>
+    </div>
+
+    <!-- SEO-005 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">SEO-005</div>
+        <div class="issue-title">meta description 与页面实际内容存在语义差距</div>
+        <span class="severity-badge sev-minor">Minor</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: 首页</span>
+        <span>测试者: <span class="tester">SEO Meta Analysis</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>meta description 为"AI STORE 致力于成为 AI 时代的 App Store，一站式聚合全网优质大模型与 AI 智能工具，覆盖 Skills、MCP、Agent 与自动化工具，让获取安全、强大的 AI 能力，像下载 App 一样简单。"这段描述本身写得不错，但它承诺了"像下载 App 一样简单"——如果用户点击搜索结果进入网站后发现并不简单，会增加 pogo-sticking 行为（快速返回搜索结果），间接降低排名。</p>
+      </div>
+      <div class="issue-detail">
+        <h4>建议</h4>
+        <p>meta description 应该准确反映页面实际提供的价值，而非理想中的价值。例如："发现并对比 1,200+ AI Skills、MCP 工具和 Agent 资源。提供安装数据、安全评分和实测对比，帮助开发者快速找到合适的 AI 工具。"</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag seo">meta 优化</span>
+        <span class="tag copy">准确性</span>
+      </div>
+    </div>
+
+    <!-- SEO-006 -->
+    <div class="issue-card">
+      <div class="issue-card-header">
+        <div class="issue-id">SEO-006</div>
+        <div class="issue-title">Social 链接使用空锚点，浪费社交信号机会</div>
+        <span class="severity-badge sev-minor">Minor</span>
+      </div>
+      <div class="issue-meta">
+        <span>页面: Footer</span>
+        <span>测试者: <span class="tester">SEO Social Analysis</span></span>
+      </div>
+      <div class="issue-detail">
+        <h4>问题分析</h4>
+        <p>Footer 底部有 3 个社交媒体按钮（<code>&lt;button aria-label="Social link"&gt;</code>），但它们不是链接（<code>&lt;a&gt;</code>），而是空按钮（<code>&lt;button&gt;</code>），没有指向任何社交媒体。搜索引擎无法通过这些按钮发现品牌的社交账号，也失去了社交信号对 SEO 的潜在正面影响。</p>
+      </div>
+      <div class="tag-row">
+        <span class="tag seo">社交信号</span>
+        <span class="tag structure">链接缺失</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 改进建议 -->
+  <!-- ============================================================ -->
+  <div class="recommendations">
+    <h3>Top 改进建议（按影响力排序）</h3>
+    <div class="rec-item">
+      <div class="rec-num">1</div>
+      <div class="rec-text"><strong>统一品牌定位与实际体验</strong> — 要么调整文案面向开发者（最小改动），要么改造产品体验面向普通用户（最大价值）。目前"AI 时代的 App Store"的定位与 Skills/MCP/Agent 的技术内容存在根本性冲突。这是所有文案问题的根源。</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num">2</div>
+      <div class="rec-text"><strong>用真实内容替换占位符</strong> — 5 步流程的"System Interface Preview"必须替换为真实可交互的内容。这对文案可信度和 SEO 质量评分都有重大影响。Google 的 Helpful Content Update 会惩罚充满占位符的页面。</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num">3</div>
+      <div class="rec-text"><strong>完成中英文本地化一致性</strong> — 要么全面中文化（包括 Skill 描述、标签、模拟数据），要么明确区分中英文内容区域。当前的半成品本地化既伤害用户体验，也影响 SEO 的语言信号一致性。</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num">4</div>
+      <div class="rec-text"><strong>修复 Footer 所有空链接</strong> — 将 <code>href="#"</code> 替换为真实页面或暂时移除链接。"隐私政策"和"联系支持"是法律必要页面，优先级最高。这同时解决文案完整性和 SEO 内部链接两个问题。</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num">5</div>
+      <div class="rec-text"><strong>差异化 CTA 文案</strong> — "开始使用"改为"浏览 Skills"或"探索 AI 工具"；5 个"了解更多"分别改为具体行动描述。让用户在点击前就知道下一步会看到什么。</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num">6</div>
+      <div class="rec-text"><strong>补充 sitemap.xml 和 robots.txt</strong> — SEO 基础检查显示 meta 标签做得不错（title、description、OG、JSON-LD 都有），但缺少 sitemap.xml 会让搜索引擎难以高效发现和索引 1200+ 资源页面。</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>Generated by TestersAI &bull; Copywriting & SEO Detection Report &bull; 2026-04-08</p>
+    <p style="margin-top:4px;">Testers: Leila (Content) + Sundar (Homepage) + Zachary (Landing) + Kwame (Search)</p>
+  </div>
+
+</div>
+</body>
+</html>
